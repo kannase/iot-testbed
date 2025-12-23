@@ -1,0 +1,12 @@
+# Core Framework
+robotframework==6.0
+
+# IoT & Data Libraries
+robotframework-mqttlibrary==0.8.0
+robotframework-jsonlibrary==0.5.0
+paho-mqtt<2.0.0
+
+# Pytest Framework
+pytest
+pytest-html
+pytest-mqtt
