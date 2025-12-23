@@ -25,44 +25,25 @@ The framework includes two critical layers of testing to ensure full system reli
 ### 1. Infrastructure Validation (Smoke Test)
 
 **Test Case:** `Self Communication Test` 
-
-* 
+ 
 **Purpose**: Validates the health of the MQTT Broker (Mosquitto).
-
-
-* 
+ 
 **Mechanism**: The test publishes a unique string (`HELLO_BROKER`) to a dedicated topic and verifies it can receive its own message.
-
-
-* 
+ 
 **Benefit**: Ensures that if functional tests fail, the infrastructure is not the root cause.
-
-
 
 ### 2. Functional Business Logic Test
 
 **Test Case:** `Verify Device Logic With Custom Keyword` 
-
-* 
+ 
 **Purpose**: Validates the "Air Quality" reporting logic based on raw sensor data.
-
-
-* 
+ 
 **Custom Python Integration**: Utilizes a custom Python helper, `get_latest_mqtt_message`, to solve timing issues by fetching the most recent telemetry from the library's buffer.
 
-
-* **Logic Verification**:
-* 
+* **Logic Verification**: 
 **JSON Parsing**: Captures the raw MQTT payload and converts it into a JSON object.
 
-
-* 
 **Threshold Validation**: Verifies that if `co2_level` is below **1000 ppm**, the `air_quality` status is reported as `SAFE`; otherwise, it must be `DANGER`.
-
-
-
-
-
 ---
 
 ## 🚀 Getting Started
@@ -80,16 +61,10 @@ The framework includes two critical layers of testing to ensure full system reli
 python simulator/iot_device_simulator.py
 
 ```
-
-
 2. **Run the Tests**:
 ```bash
 robot tests/iot_integration_test.robot
-
 ```
-
-
-
 ---
 
 ### Tips for using this in GitHub:
