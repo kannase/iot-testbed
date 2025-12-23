@@ -60,10 +60,3 @@ python simulator/iot_device_simulator.py
 robot tests/iot_integration_test.robot
 ```
 ---
-
-### Tips for using this in GitHub:
-
-1. **Badges**: These use "Shields.io" syntax. They will automatically appear as colorful buttons at the top of your page once you save the file.
-2. **Links**: If you eventually want to show your "Build Passing" status, you can add a GitHub Actions badge later once you set up CI/CD.
-
-**Would you like me to help you create the `requirements.txt` file now so that your "Getting Started" section is fully functional?**
