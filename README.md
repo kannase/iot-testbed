@@ -1,9 +1,3 @@
-You are right; adding badges to your README makes it look significantly more professional and provides a quick visual summary of the technologies you are using.
-
-Here is the updated **README.md** incorporating the **"iot_device"** architecture, your specific test logic, and professional status badges.
-
----
-
 # 🌐 IoT Device Automation Framework
 
 This project demonstrates a professional-grade test automation framework for an **IoT Ecosystem**. It features a simulated **IoT Device** communicating via **MQTT** and a comprehensive suite of tests built with **Robot Framework**.
