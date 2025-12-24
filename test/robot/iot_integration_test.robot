@@ -2,7 +2,7 @@
 Library    MQTTLibrary
 Library    JSONLibrary
 Library    Collections
-# Points to your new generic simulator file
+# Since we use PYTHONPATH, we don't need paths here
 Library    iot_device_simulator.py
 *** Variables ***
 ${BROKER_HOST}    localhost
