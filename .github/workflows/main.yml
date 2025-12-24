@@ -1,0 +1,55 @@
+name: IoT Test Automation Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  test-suite:
+    runs-on: ubuntu-latest
+
+    # Service container for the MQTT Broker
+    services:
+      mosquitto:
+        image: eclipse-mosquitto
+        ports:
+          - 1883:1883
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start IoT Simulator
+        run: |
+          # Start the simulator in the background (&)
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/simulator
+          python simulator/iot_device_simulator.py &
+          # Give the simulator a moment to connect to the broker
+          sleep 3
+
+      - name: Run Robot Framework Tests
+        run: |
+          # We add the absolute path of 'simulator' to PYTHONPATH
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/simulator
+          # We run robot and tell it to output results to a specific folder
+          robot --outputdir results tests/robot/iot_integration_test.robot
+
+      - name: Run Pytest Logic Tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/simulator
+          pytest tests/pytest/ --html=results/pytest_report.html --self-contained-html
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-test-reports
+          path: results/
