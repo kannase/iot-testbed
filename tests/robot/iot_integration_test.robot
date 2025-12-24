@@ -3,7 +3,7 @@ Library    MQTTLibrary
 Library    JSONLibrary
 Library    Collections
 # Since we use PYTHONPATH, we don't need paths here
-Library    iot_device_simulator.py
+Library    simulator.iot_device_simulator
 *** Variables ***
 ${BROKER_HOST}    localhost
 ${BROKER_PORT}    1883
