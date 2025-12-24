@@ -3,8 +3,7 @@ Library    MQTTLibrary
 Library    JSONLibrary
 Library    Collections
 # Points to your new generic simulator file
-Library    ../simulator/iot_device_simulator.py
-
+Library    iot_device_simulator.py
 *** Variables ***
 ${BROKER_HOST}    localhost
 ${BROKER_PORT}    1883
