@@ -27,21 +27,21 @@ Verify Device Logic With Custom Keyword
     Connect            ${BROKER_HOST}    ${BROKER_PORT}
     Subscribe          ${TOPIC}    0
     
-    #1. Wait for the simulator to send at least one heartbeat [cite: 21]
+    #1. Wait for the simulator to send at least one heartbeat 
     Sleep              2s
     
-    #2. Get the library instance to pass to our custom Python keyword [cite: 21]
+    #2. Get the library instance to pass to our custom Python keyword 
     ${mqtt_lib}=       Get Library Instance    MQTTLibrary
     
-    #3. Use the helper function from iot_device_simulator.py to get the latest message [cite: 22]
+    #3. Use the helper function from iot_device_simulator.py to get the latest message 
     ${payload}=        Get Latest Mqtt Message    ${mqtt_lib}    ${TOPIC}
     
-    Should Not Be Equal    ${payload}    ${None}    msg=No telemetry received from the simulator! [cite: 23]
+    Should Not Be Equal    ${payload}    ${None}    msg=No telemetry received from the simulator! 
     
-    #4. Parse the JSON and validate business logic [cite: 23]
+    #4. Parse the JSON and validate business logic 
     ${json_obj}=       Convert String To Json    ${payload}
     
-    # Verify the ID matches our new generic SENSOR-01 [cite: 23]
+    # Verify the ID matches our new generic SENSOR-01 
     Should Be Equal As Strings    ${json_obj['device_id']}    SENSOR-01
     
     #Validate the Air Quality Logic: CO2 < 1000 must be SAFE 
