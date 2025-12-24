@@ -33,7 +33,7 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)/simulator
           python simulator/iot_device_simulator.py &
           # Give the simulator a moment to connect to the broker
-          sleep 3
+          sleep 5
 
       - name: Run Robot Framework Tests
         run: |
