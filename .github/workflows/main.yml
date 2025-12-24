@@ -45,6 +45,7 @@ jobs:
       - name: Run Robot Framework Tests
         run: |
           mkdir -p results
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
           robot --outputdir results tests/robot/
 
       - name: Upload Test Results and Debug Logs
