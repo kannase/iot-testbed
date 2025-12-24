@@ -42,6 +42,12 @@ jobs:
           timeout 15s bash -c 'until printf "" 2>>/dev/null >/dev/tcp/127.0.0.1/1883; do sleep 1; done'
           echo "Broker is confirmed UP!"
 
+      - name: Run Unit Tests
+        run: |
+          pip install pytest
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest tests/pytest/test_iot_logic.py
+      
       - name: Run Robot Framework Tests
         run: |
           mkdir -p results
