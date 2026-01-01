@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import time
 import random
 import json
+import argparse # Added for command line argume
 
 def get_latest_mqtt_message(lib_instance, topic):
     """Helper for Robot Framework to parse messages from the internal buffer."""
@@ -10,6 +11,11 @@ def get_latest_mqtt_message(lib_instance, topic):
     return messages[-1] if messages else None
 
 def run_simulator():
+    # Set up argument parsing
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--broker', default='localhost', help="MQTT Broker address")
+    args = parser.parse_args()
+    
     # Generic IoT Topic Structure
     BROKER = "localhost"
     TOPIC = "iot/device/telemetry"
