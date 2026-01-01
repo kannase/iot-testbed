@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         // Using the internal Podman gateway to find the Mosquitto container
-        MQTT_BROKER = 'host.containers.internal'
+        MQTT_BROKER = 'localhost'
     }
 
     stages {
