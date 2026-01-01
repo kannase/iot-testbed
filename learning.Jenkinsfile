@@ -35,7 +35,7 @@ pipeline {
                         echo "Starting Device Simulator from subfolder..."
                         // Added 20-seconds timeout to stop the 'while True' loop eventually 
                         timeout(time: 20, unit: 'SECONDS') {
-                            bat ".\\venv\\Scripts\\python.exe simulator/iot_device_simulator.py --broker %MQTT_BROKER%"
+                            bat ".\\venv\\Scripts\\python.exe simulator/iot_device_simulator.py --broker %MQTT_BROKER% < nul || exit 0"
                         }
                     }
                 }
