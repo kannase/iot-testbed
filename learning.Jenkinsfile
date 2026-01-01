@@ -46,6 +46,13 @@ pipeline {
                         bat ".\\venv\\Scripts\\python.exe -m pytest tests/pytest --junitxml=results.xml"
                     }
                 }
+				stage('Robot Framework E2E') {
+                    steps {
+                        echo "Running Integration/End-to-End Tests..."
+                        // -d robot_results puts the HTML logs in a specific folder for Jenkins to archive
+                        bat ".\\venv\\Scripts\\python.exe -m robot -d robot_results tests/robot/iot_integration_test.robot"
+                    }
+                }
             }
         }
     }
