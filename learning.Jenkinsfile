@@ -33,8 +33,8 @@ pipeline {
                 stage('Device Simulation') {
                     steps {
                         echo "Starting Device Simulator from subfolder..."
-                        // Added 1-minute timeout to stop the 'while True' loop eventually 
-                        timeout(time: 1, unit: 'MINUTES') {
+                        // Added 20-seconds timeout to stop the 'while True' loop eventually 
+                        timeout(time: 20, unit: 'SECONDS') {
                             bat ".\\venv\\Scripts\\python.exe simulator/iot_device_simulator.py --broker %MQTT_BROKER%"
                         }
                     }
@@ -58,8 +58,8 @@ pipeline {
         }
         cleanup {
             echo "Cleaning up containers..."
-            sh 'podman stop mqtt-broker || true'
-            sh 'podman rm mqtt-broker || true'
+            bat 'podman stop mqtt-broker || exit 0'
+            bat 'podman rm mqtt-broker || exit 0'
         }
     }
 }
