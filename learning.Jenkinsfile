@@ -62,6 +62,14 @@ pipeline {
             echo "Generating Test Reports..."
             // Looks for the results.xml generated in the workspace 
             junit 'results.xml'
+			publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'robot_results',
+                reportFiles: 'report.html',
+                reportName: 'Robot Framework Report'
+            ])
         }
         cleanup {
             echo "Cleaning up containers..."
