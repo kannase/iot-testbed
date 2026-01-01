@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'worker-1'
+        label 'built-in'
     }
 
     environment {
@@ -12,12 +12,11 @@ pipeline {
         stage('1. Environment Setup') {
             steps {
                 echo "Creating Virtual Environment and installing dependencies..."
-                // Creates a local 'venv' folder and installs requirements [cite: 5, 6]
-                sh '''
-            python3 -m venv venv
-            # Point to the file inside the iot-testbed folder
-            ./venv/bin/pip install -r requirements.txt
-        '''
+                // Creates a local 'venv' folder and installs requirements 
+                bat '''
+                python -m venv venv
+                .\\venv\\Scripts\\pip install -r requirements.txt
+                '''
             }
         }
 
@@ -25,7 +24,7 @@ pipeline {
             steps {
                 echo "Ensuring Mosquitto Broker is running..."
                 // This starts the broker container using the podman installed in your agent
-                sh 'podman run -d --name mqtt-broker -p 1883:1883 eclipse-mosquitto || true'
+                bat 'podman run -d --name mqtt-broker -p 1883:1883 eclipse-mosquitto || exit 0'
             }
         }
 
@@ -36,7 +35,7 @@ pipeline {
                         echo "Starting Device Simulator from subfolder..."
                         // Added 1-minute timeout to stop the 'while True' loop eventually 
                         timeout(time: 1, unit: 'MINUTES') {
-                            sh "./venv/bin/python3 simulator/iot_device_simulator.py --broker ${env.MQTT_BROKER}"
+                            bat ".\\venv\\Scripts\\python.exe simulator/iot_device_simulator.py --broker %MQTT_BROKER%"
                         }
                     }
                 }
@@ -44,7 +43,7 @@ pipeline {
                     steps {
                         echo "Running Pytest from subfolder..."
                         // Points to the exact folder: iot-testbed/tests/pytest 
-                        sh "./venv/bin/python3 -m pytest tests/pytest --junitxml=results.xml"
+                        bat ".\\venv\\Scripts\\python.exe -m pytest tests/pytest --junitxml=results.xml"
                     }
                 }
             }
@@ -54,7 +53,7 @@ pipeline {
     post {
         always {
             echo "Generating Test Reports..."
-            // Looks for the results.xml generated in the workspace [cite: 12]
+            // Looks for the results.xml generated in the workspace 
             junit 'results.xml'
         }
         cleanup {
