@@ -16,7 +16,7 @@ pipeline {
                 sh '''
             python3 -m venv venv
             # Point to the file inside the iot-testbed folder
-            ./venv/bin/pip install -r iot-testbed/requirements.txt
+            ./venv/bin/pip install -r requirements.txt
         '''
             }
         }
@@ -44,7 +44,7 @@ pipeline {
                     steps {
                         echo "Running Pytest from subfolder..."
                         // Points to the exact folder: iot-testbed/tests/pytest 
-                        sh "./venv/bin/python3 -m pytest iot-testbed/tests/pytest --junitxml=results.xml"
+                        sh "./venv/bin/python3 -m pytest tests/pytest --junitxml=results.xml"
                     }
                 }
             }
