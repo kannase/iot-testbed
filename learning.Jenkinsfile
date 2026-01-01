@@ -47,15 +47,14 @@ pipeline {
                     }
                 }
 				stage('Robot Framework E2E') {
-                    steps {
-                        echo "Ensuring results directory exists and running Robot Framework..."
-                        // 'if not exist' creates the folder only if it's missing
-                       // Then we run the tests
-                       bat '''
-                       if not exist robot_results mkdir robot_results
-                       .\\venv\\Scripts\\python.exe -m robot -d robot_results tests/robot/iot_integration_test.robot
-                       '''
-                    }
+                        steps {
+                            echo "Running Robot Framework..."
+                           // Use mkdir to ensure the folder exists before robot starts
+                           bat '''
+                           if not exist robot_results mkdir robot_results
+                           .\\venv\\Scripts\\python.exe -m robot --outputdir robot_results tests/robot/iot_integration_test.robot
+                           '''
+                        }
                 }
             }
         }
