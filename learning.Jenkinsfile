@@ -67,7 +67,7 @@ pipeline {
             // Looks for the results.xml generated in the workspace 
             junit 'results.xml'
 			publishHTML([
-                allowMissing: false,
+                allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'robot_results',
