@@ -15,7 +15,6 @@ TOPIC = "home/sensor/temperature"
 def run_simulator():
     client = mqtt.Client()
     
-    # Industry standard retry logic
     retry_count = 0
     max_retries = 5
     connected = False
@@ -33,25 +32,23 @@ def run_simulator():
             time.sleep(5)
 
     if not connected:
-        print("ERROR: Could not connect to MQTT broker after multiple attempts.")
+        print("ERROR: Could not connect to MQTT broker.")
         exit(1)
 
-    # Start the loop
     client.loop_start()
 
     try:
         print(f"Starting to publish data to {TOPIC}...")
-        # Industry change: Send 10 messages then exit gracefully
-        for i in range(10):
+        # BACK TO FOREVER MODE
+        while True:
             temp = round(random.uniform(18.0, 26.0), 2)
             client.publish(TOPIC, temp)
-            print(f"[{i+1}/10] Published: {temp} to {TOPIC}")
+            print(f"Published: {temp} to {TOPIC}")
             time.sleep(2)
-        print("Simulation complete. Exiting gracefully.")
     except KeyboardInterrupt:
-        print("Simulator stopped by user.")
-		
+        print("Stopped by user.")
     finally:
+        print("Cleaning up...")
         client.loop_stop()
         client.disconnect()
 
