@@ -41,13 +41,16 @@ def run_simulator():
 
     try:
         print(f"Starting to publish data to {TOPIC}...")
-        while True:
+        # Industry change: Send 10 messages then exit gracefully
+        for i in range(10):
             temp = round(random.uniform(18.0, 26.0), 2)
             client.publish(TOPIC, temp)
-            print(f"Published: {temp} to {TOPIC}")
+            print(f"[{i+1}/10] Published: {temp} to {TOPIC}")
             time.sleep(2)
+        print("Simulation complete. Exiting gracefully.")
     except KeyboardInterrupt:
         print("Simulator stopped by user.")
+		
     finally:
         client.loop_stop()
         client.disconnect()
