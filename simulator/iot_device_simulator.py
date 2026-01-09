@@ -1,51 +1,55 @@
 import paho.mqtt.client as mqtt
 import time
 import random
-import json
-import argparse # Added for command line argume
+import argparse
 
-def get_latest_mqtt_message(lib_instance, topic):
-    """Helper for Robot Framework to parse messages from the internal buffer."""
-    buffer = getattr(lib_instance, '_messages', {})
-    messages = buffer.get(topic, [])
-    return messages[-1] if messages else None
+# --- Configuration ---
+parser = argparse.ArgumentParser()
+parser.add_argument('--broker', type=str, default='localhost', help='MQTT broker hostname')
+args = parser.parse_args()
+
+BROKER = args.broker
+PORT = 1883
+TOPIC = "home/sensor/temperature"
 
 def run_simulator():
-    # Set up argument parsing
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--broker', default='localhost', help="MQTT Broker address")
-    args = parser.parse_args()
+    client = mqtt.Client()
     
-    # Generic IoT Topic Structure
-    BROKER = "localhost"
-    TOPIC = "iot/device/telemetry"
-    
-    # Client Setup (Paho 1.6 compatible)
-    client = mqtt.Client("IoT_Gateway_001")
-    client.connect(BROKER, 1883)
-    
-    print(f"--- IoT Device Simulator Started ---")
-    print(f"Publishing to: {TOPIC}\n")
-    
+    # Industry standard retry logic
+    retry_count = 0
+    max_retries = 5
+    connected = False
+
+    while retry_count < max_retries:
+        try:
+            print(f"Connecting to broker {BROKER} (Attempt {retry_count + 1}/{max_retries})...")
+            client.connect(BROKER, PORT)
+            connected = True
+            print("Successfully connected to the broker!")
+            break
+        except Exception as e:
+            retry_count += 1
+            print(f"Connection failed: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
+
+    if not connected:
+        print("ERROR: Could not connect to MQTT broker after multiple attempts.")
+        exit(1)
+
+    # Start the loop
+    client.loop_start()
+
     try:
+        print(f"Starting to publish data to {TOPIC}...")
         while True:
-            co2 = random.randint(400, 1200)
-            status = "SAFE" if co2 < 1000 else "DANGER"
-            
-            payload_data = {
-                "device_id": "SENSOR-01", 
-                "co2_level": co2, 
-                "air_quality": status,
-                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-            }
-            
-            # Hybrid logging: Professional but visible
-            print(f"Sent: {status} | CO2: {co2} ppm") 
-            
-            client.publish(TOPIC, json.dumps(payload_data))
-            time.sleep(1) 
+            temp = round(random.uniform(18.0, 26.0), 2)
+            client.publish(TOPIC, temp)
+            print(f"Published: {temp} to {TOPIC}")
+            time.sleep(2)
     except KeyboardInterrupt:
-        print("\nShutting down...")
+        print("Simulator stopped by user.")
+    finally:
+        client.loop_stop()
         client.disconnect()
 
 if __name__ == "__main__":
